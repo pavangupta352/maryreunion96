@@ -15,7 +15,8 @@
   <meta name="twitter:image" content="assets/images/lmhs-ram-statue.jpg">
   <meta name="theme-color" content="#0B0B0F">
   <link rel="icon" type="image/png" href="assets/images/school-logo.png">
-  <link rel="preload" as="image" href="assets/images/lmhs-ram-statue.jpg">
+  <link rel="preload" as="image" href="assets/images/lmhs-ram-statue-mobile.jpg" media="(max-width: 767px)">
+  <link rel="preload" as="image" href="assets/images/lmhs-ram-statue.jpg" media="(min-width: 768px)">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -60,6 +61,11 @@
       overscroll-behavior: contain;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    a, button, label, input[type="checkbox"], input[type="radio"] { touch-action: manipulation; }
+    @media (max-width: 767px) {
+      body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
     }
     img { max-width: 100%; height: auto; display: block; }
 
@@ -75,21 +81,34 @@
       background-size: 256px 256px;
     }
 
-    /* Hero photo background */
+    /* Hero photo background — mobile uses a portrait crop, desktop the wide original */
     .hero-photo {
       position: absolute;
       inset: 0;
-      background-image: url("assets/images/lmhs-ram-statue.jpg");
+      background-image: url("assets/images/lmhs-ram-statue-mobile.jpg");
       background-size: cover;
-      background-position: center 30%;
-      filter: grayscale(35%) brightness(0.55) contrast(1.05);
+      background-position: center 38%;
+      filter: grayscale(30%) brightness(0.55) contrast(1.05);
+    }
+    @media (min-width: 768px) {
+      .hero-photo {
+        background-image: url("assets/images/lmhs-ram-statue.jpg");
+        background-position: center 30%;
+      }
     }
     .hero-overlay {
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 30% 40%, rgba(196,30,58,0.18) 0%, transparent 55%),
-        linear-gradient(180deg, rgba(11,11,15,0.55) 0%, rgba(11,11,15,0.78) 60%, rgba(11,11,15,1) 100%);
+        radial-gradient(ellipse at 50% 35%, rgba(196,30,58,0.20) 0%, transparent 55%),
+        linear-gradient(180deg, rgba(11,11,15,0.45) 0%, rgba(11,11,15,0.7) 55%, rgba(11,11,15,0.98) 92%, rgba(11,11,15,1) 100%);
+    }
+    @media (min-width: 768px) {
+      .hero-overlay {
+        background:
+          radial-gradient(ellipse at 30% 40%, rgba(196,30,58,0.18) 0%, transparent 55%),
+          linear-gradient(180deg, rgba(11,11,15,0.4) 0%, rgba(11,11,15,0.7) 60%, rgba(11,11,15,1) 100%);
+      }
     }
 
     /* Scarlet glow behind logo */
@@ -234,18 +253,28 @@
     /* Countdown */
     .countdown-num {
       font-family: 'Anton', sans-serif;
-      font-size: 2rem;
+      font-size: 1.75rem;
       line-height: 1;
       color: #fff;
     }
     .countdown-label {
       font-family: 'Oswald', sans-serif;
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       letter-spacing: 0.2em;
       color: rgba(192,192,192,0.4);
       margin-top: 0.25rem;
     }
-    @media (min-width: 640px) { .countdown-num { font-size: 2.75rem; } }
+    .countdown-sep {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.4rem;
+      color: rgba(192,192,192,0.2);
+      line-height: 1;
+    }
+    @media (min-width: 640px) {
+      .countdown-num { font-size: 2.75rem; }
+      .countdown-label { font-size: 0.65rem; }
+      .countdown-sep { font-size: 2rem; }
+    }
 
     /* Form */
     .field {
@@ -292,8 +321,8 @@
       position: fixed;
       bottom: 0; left: 0; right: 0;
       z-index: 40;
-      padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
-      background: linear-gradient(180deg, rgba(11,11,15,0.6), rgba(11,11,15,0.96));
+      padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(11,11,15,0.55), rgba(11,11,15,0.97));
       backdrop-filter: blur(14px);
       border-top: 1px solid rgba(196,30,58,0.2);
       transform: translateY(100%);
@@ -301,15 +330,18 @@
     }
     .sticky-cta.visible { transform: translateY(0); }
     @media (min-width: 768px) { .sticky-cta { display: none; } }
+    html { scroll-padding-top: 80px; }
 
     /* Footer ticker */
     .ticker {
       font-family: 'Anton', sans-serif;
-      font-size: clamp(2rem, 8vw, 4.5rem);
+      font-size: clamp(1.6rem, 8vw, 4.5rem);
       letter-spacing: 0.05em;
       color: transparent;
       -webkit-text-stroke: 1px rgba(196,30,58,0.35);
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
     }
 
     /* Image with grayscale-on-load */
@@ -363,9 +395,9 @@
         ALL ALUMNI WELCOME · HOSTED BY THE CLASS OF '96
       </p>
 
-      <h1 class="hero-reunion mb-3 sm:mb-4">
-        <span class="font-display text-5xl sm:text-7xl md:text-8xl leading-none tracking-tight text-metallic block">REUNION</span>
-        <span class="font-display text-5xl sm:text-7xl md:text-8xl leading-none tracking-tight text-white block">WEEKEND</span>
+      <h1 class="hero-reunion mb-3 sm:mb-4 leading-[0.95]">
+        <span class="font-display text-[clamp(2.75rem,13vw,5rem)] sm:text-7xl md:text-8xl tracking-tight text-metallic block">REUNION</span>
+        <span class="font-display text-[clamp(2.75rem,13vw,5rem)] sm:text-7xl md:text-8xl tracking-tight text-white block">WEEKEND</span>
       </h1>
 
       <p class="hero-save font-script text-2xl sm:text-4xl text-scarlet-light mb-3 sm:mb-4">
@@ -376,14 +408,14 @@
         OCTOBER 23 · 24 · 2026
       </p>
 
-      <div class="hero-date mt-6 sm:mt-8 flex items-center justify-center gap-3 sm:gap-6" id="countdown" aria-label="Countdown to reunion">
-        <div class="flex flex-col items-center"><span class="countdown-num" id="cd-days">---</span><span class="countdown-label">DAYS</span></div>
-        <span class="text-silver/15 font-display text-2xl">:</span>
-        <div class="flex flex-col items-center"><span class="countdown-num" id="cd-hours">--</span><span class="countdown-label">HOURS</span></div>
-        <span class="text-silver/15 font-display text-2xl">:</span>
-        <div class="flex flex-col items-center"><span class="countdown-num" id="cd-mins">--</span><span class="countdown-label">MINS</span></div>
-        <span class="text-silver/15 font-display text-2xl">:</span>
-        <div class="flex flex-col items-center"><span class="countdown-num" id="cd-secs">--</span><span class="countdown-label">SECS</span></div>
+      <div class="hero-date mt-6 sm:mt-8 flex items-center justify-center gap-2 sm:gap-5" id="countdown" aria-label="Countdown to reunion">
+        <div class="flex flex-col items-center min-w-[44px]"><span class="countdown-num" id="cd-days">---</span><span class="countdown-label">DAYS</span></div>
+        <span class="countdown-sep" aria-hidden="true">:</span>
+        <div class="flex flex-col items-center min-w-[44px]"><span class="countdown-num" id="cd-hours">--</span><span class="countdown-label">HRS</span></div>
+        <span class="countdown-sep" aria-hidden="true">:</span>
+        <div class="flex flex-col items-center min-w-[44px]"><span class="countdown-num" id="cd-mins">--</span><span class="countdown-label">MIN</span></div>
+        <span class="countdown-sep" aria-hidden="true">:</span>
+        <div class="flex flex-col items-center min-w-[44px]"><span class="countdown-num" id="cd-secs">--</span><span class="countdown-label">SEC</span></div>
       </div>
 
       <div class="hero-cta mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
@@ -771,18 +803,13 @@
       </div>
 
       <!--
-        ============================================================
-        RSVP FORM — INSTRUCTIONS FOR ALLISON
-        ============================================================
-        Form submissions go to FormSubmit.co (no signup needed).
-        REPLACE the action URL below: change REPLACE_WITH_YOUR_EMAIL
-        to the email address that should receive RSVPs.
-        First submission triggers a one-time activation email — confirm it.
-        ============================================================
+        RSVP form — submissions go to createyourwellness@gmail.com via FormSubmit.co.
+        First submission will trigger a one-time activation email — confirm it
+        to start receiving entries.
       -->
       <form
         id="rsvp-form"
-        action="https://formsubmit.co/REPLACE_WITH_YOUR_EMAIL"
+        action="https://formsubmit.co/createyourwellness@gmail.com"
         method="POST"
         class="reveal reveal-delay-1 space-y-5 max-w-md mx-auto"
         novalidate
@@ -816,17 +843,18 @@
           <div class="grid grid-cols-3 gap-2">
             <label class="radio-chip">
               <input type="radio" name="attending" value="Friday only" required>
-              FRIDAY
+              FRI
             </label>
             <label class="radio-chip">
               <input type="radio" name="attending" value="Saturday only">
-              SATURDAY
+              SAT
             </label>
             <label class="radio-chip is-checked">
               <input type="radio" name="attending" value="Both Nights" checked>
-              BOTH NIGHTS
+              BOTH
             </label>
           </div>
+          <p class="font-body text-xs text-silver/35 mt-2">Friday only · Saturday only · or both nights.</p>
         </div>
 
         <!-- Number of Guests -->
@@ -900,8 +928,8 @@
   <!-- Sticky mobile CTA -->
   <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
     <div class="flex gap-2 max-w-md mx-auto">
-      <a href="#tickets" class="flex-1 font-heading text-xs tracking-[0.2em] bg-scarlet text-white px-4 py-3 min-h-[48px] flex items-center justify-center cursor-pointer">GET TICKET</a>
-      <a href="#rsvp" class="flex-1 font-heading text-xs tracking-[0.2em] border border-silver/30 text-silver-light px-4 py-3 min-h-[48px] flex items-center justify-center cursor-pointer">RSVP</a>
+      <a href="#tickets" class="flex-1 font-heading text-[11px] tracking-[0.2em] bg-scarlet hover:bg-scarlet-light text-white px-3 py-3 min-h-[48px] flex items-center justify-center cursor-pointer transition-colors">GET TICKET</a>
+      <a href="#rsvp" class="flex-1 font-heading text-[11px] tracking-[0.2em] border border-silver/30 text-silver-light hover:border-scarlet hover:text-white px-3 py-3 min-h-[48px] flex items-center justify-center cursor-pointer transition-colors">RSVP</a>
     </div>
   </div>
 
