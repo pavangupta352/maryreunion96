@@ -485,7 +485,7 @@
                   </div>
                   <div class="flex-1 border-l border-scarlet/30 pl-4 pb-1">
                     <h4 class="font-heading text-sm sm:text-base tracking-wider text-white mb-1">ARRIVAL & CHECK-IN</h4>
-                    <p class="font-body text-sm text-silver/55">Pick up your name badge, grab a t-shirt, and start spotting old faces.</p>
+                    <p class="font-body text-sm text-silver/55">Pick up your name badge, grab your alumni t-shirt, and start spotting old faces.</p>
                   </div>
                 </li>
                 <li class="flex gap-4">
@@ -605,7 +605,7 @@
             <!-- Includes badge -->
             <div class="rounded-xl border border-silver/10 bg-slate/40 p-4 sm:p-5">
               <p class="font-heading text-xs tracking-[0.2em] text-silver/50 mb-2">INCLUDED WITH YOUR TICKET</p>
-              <p class="font-body text-sm text-silver/75">Heavy appetizers · refreshments · the official LMHS Alumni T-shirt</p>
+              <p class="font-body text-sm text-silver/75">Heavy appetizers · refreshments · catch-up time with everyone</p>
             </div>
           </div>
         </div>
@@ -624,7 +624,7 @@
       <div class="text-center mb-10 sm:mb-14 reveal">
         <p class="eyebrow mb-5">SECURE YOUR SPOT</p>
         <h2 class="font-display text-3xl sm:text-5xl md:text-6xl text-white mb-3 sm:mb-4">TICKETS</h2>
-        <p class="font-body text-sm sm:text-base text-silver/55 max-w-xl mx-auto">Pick your ticket, choose your t-shirt size at checkout, and we'll see you in October.</p>
+        <p class="font-body text-sm sm:text-base text-silver/55 max-w-xl mx-auto">Pick your ticket, choose your t-shirt size at checkout (alumni), and we'll see you in October.</p>
       </div>
 
       <!--
@@ -638,10 +638,10 @@
                Options: XS, S, M, L, XL, 2XL, 3XL)
              ▸ Collect customer email + shipping address (optional)
            • "LMHS Guest Ticket" — $25.00 USD
-             ▸ Same T-Shirt Size custom field
+             ▸ NO T-shirt custom field — guests do not receive a t-shirt.
         3. Copy each Payment Link URL.
         4. Replace the two HREF values below (search for STRIPE_LINK).
-        5. Done — buyers will be sent to Stripe Checkout with size selection.
+        5. Done — buyers will be sent to Stripe Checkout.
         ============================================================
       -->
 
@@ -696,10 +696,6 @@
             </div>
             <p class="font-body text-sm text-silver/55 mb-6">For spouses, partners, family, and friends joining alumni.</p>
             <ul class="space-y-3 mb-7">
-              <li class="flex items-start gap-3">
-                <svg class="w-5 h-5 text-silver-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span class="font-body text-sm text-silver-light">Official LMHS Alumni <strong>T-shirt</strong></span>
-              </li>
               <li class="flex items-start gap-3">
                 <svg class="w-5 h-5 text-silver-light flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 <span class="font-body text-sm text-silver-light"><strong>Dinner</strong> at the Friday night game</span>
@@ -874,9 +870,9 @@
 
         <!-- T-shirt size(s) -->
         <div>
-          <label for="tshirt-sizes" class="field-label">T-Shirt Size(s)</label>
-          <input type="text" id="tshirt-sizes" name="tshirt_sizes" class="field" placeholder="e.g. M, L, XL (one per person)">
-          <p class="font-body text-xs text-silver/35 mt-2">Comma-separated if multiple — one size per person attending.</p>
+          <label for="tshirt-sizes" class="field-label">Alumni T-Shirt Size(s)</label>
+          <input type="text" id="tshirt-sizes" name="tshirt_sizes" class="field" placeholder="e.g. M, L, XL">
+          <p class="font-body text-xs text-silver/35 mt-2">One size per alumni attending — guests do not receive a t-shirt.</p>
         </div>
 
         <!-- Message -->
