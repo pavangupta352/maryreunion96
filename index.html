@@ -656,28 +656,14 @@
       <div class="text-center mb-10 sm:mb-14 reveal">
         <p class="eyebrow mb-5">SECURE YOUR SPOT</p>
         <h2 class="font-display text-3xl sm:text-5xl md:text-6xl text-white mb-3 sm:mb-4">TICKETS</h2>
-        <p class="font-body text-sm sm:text-base text-silver/55 max-w-xl mx-auto">Pick your ticket, choose your t-shirt size at checkout (alumni), and we'll see you in October.</p>
+        <p class="font-body text-sm sm:text-base text-silver/55 max-w-xl mx-auto">Pick your ticket on Cheddar Up, choose your t-shirt size there (alumni), and we'll see you in October.</p>
       </div>
 
       <!--
-        ============================================================
-        STRIPE SETUP — INSTRUCTIONS FOR ALLISON
-        ============================================================
-        1. Create a Stripe account at stripe.com (if you don't have one).
-        2. In the Stripe Dashboard, go to "Payment Links" and create three:
-           • "LMHS Alumni Ticket" — $50.00 USD
-             ▸ Add a Custom Field named "T-Shirt Size" (Type: Dropdown,
-               Options: XS, S, M, L, XL, 2XL, 3XL)
-             ▸ Collect customer email + shipping address (optional)
-           • "LMHS Guest Ticket" — $25.00 USD
-             ▸ NO T-shirt custom field — guests do not receive a t-shirt.
-           • "LMHS Alumni T-Shirt (Add-On)" — $15.00 USD
-             ▸ Same T-Shirt Size Custom Field as the Alumni Ticket.
-             ▸ Collect customer email + shipping address.
-        3. Copy each Payment Link URL.
-        4. Replace the three HREF values below (search for STRIPE_LINK).
-        5. Done — buyers will be sent to Stripe Checkout.
-        ============================================================
+        Payments: Cheddar Up collection page.
+        All three "Buy" buttons and the T-shirt add-on link to the same
+        Cheddar Up URL — buyers pick their item(s) + t-shirt size(s) there.
+        URL: https://my.cheddarup.com/c/lake-mary-30th-reunion
       -->
 
       <div class="grid sm:grid-cols-2 gap-5 sm:gap-6 mb-8">
@@ -710,7 +696,7 @@
                 <span class="font-body text-sm text-silver-light"><strong>Campus tour</strong> + sit together in the stands</span>
               </li>
             </ul>
-            <a href="https://buy.stripe.com/STRIPE_LINK_ALUMNI" data-stripe-placeholder="alumni"
+            <a href="https://my.cheddarup.com/c/lake-mary-30th-reunion" target="_blank" rel="noopener"
               class="block w-full text-center font-heading text-sm tracking-[0.2em] bg-scarlet hover:bg-scarlet-light text-white px-6 py-4 min-h-[52px] transition-all duration-300 hover:shadow-[0_0_30px_rgba(196,30,58,0.35)] cursor-pointer">
               BUY ALUMNI TICKET — $50
             </a>
@@ -740,7 +726,7 @@
                 <span class="font-body text-sm text-silver-light">Sit with your alumni in the stands</span>
               </li>
             </ul>
-            <a href="https://buy.stripe.com/STRIPE_LINK_GUEST" data-stripe-placeholder="guest"
+            <a href="https://my.cheddarup.com/c/lake-mary-30th-reunion" target="_blank" rel="noopener"
               class="block w-full text-center font-heading text-sm tracking-[0.2em] border border-scarlet text-scarlet hover:bg-scarlet hover:text-white px-6 py-4 min-h-[52px] transition-all duration-300 cursor-pointer">
               BUY GUEST TICKET — $25
             </a>
@@ -765,7 +751,7 @@
             </h3>
             <p class="font-body text-sm text-silver/55">Extra alumni shirts — for family, friends back home, or anyone who wants one. Pick your size at checkout.</p>
           </div>
-          <a href="https://buy.stripe.com/STRIPE_LINK_TSHIRT" data-stripe-placeholder="tshirt"
+          <a href="https://my.cheddarup.com/c/lake-mary-30th-reunion" target="_blank" rel="noopener"
             class="w-full sm:w-auto text-center font-heading text-sm tracking-[0.2em] border border-scarlet text-scarlet hover:bg-scarlet hover:text-white px-6 py-3.5 min-h-[48px] flex items-center justify-center transition-all duration-300 cursor-pointer">
             BUY T-SHIRT — $15
           </a>
@@ -773,7 +759,7 @@
       </div>
 
       <p class="text-center font-body text-sm text-silver/40 reveal reveal-delay-4">
-        Secure checkout via Stripe · t-shirt size selected at checkout · questions? <a href="#rsvp" class="text-scarlet hover:text-scarlet-light underline underline-offset-4 cursor-pointer">use the RSVP form</a>.
+        Secure checkout via Cheddar Up · pick your items and t-shirt size there · questions? <a href="#rsvp" class="text-scarlet hover:text-scarlet-light underline underline-offset-4 cursor-pointer">use the RSVP form</a>.
       </p>
     </div>
   </section>
@@ -1042,19 +1028,7 @@
       });
     });
 
-    // Stripe placeholder guard — show friendly message until real link is set
-    document.querySelectorAll('a[data-stripe-placeholder]').forEach(link => {
-      const href = link.getAttribute('href');
-      if (href && href.includes('STRIPE_LINK_')) {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          alert("Online ticket purchase is going live shortly. In the meantime, RSVP below and we'll send you a payment link.");
-          document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth' });
-        });
-      }
-    });
-
-    // RSVP form: handle FormSubmit placeholder + success
+// RSVP form: handle FormSubmit placeholder + success
     const rsvpForm = document.getElementById('rsvp-form');
     const formAction = rsvpForm.getAttribute('action');
     if (formAction.includes('REPLACE_WITH_YOUR_EMAIL')) {
