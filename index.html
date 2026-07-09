@@ -871,24 +871,23 @@
         <p class="font-script text-2xl sm:text-4xl text-scarlet-light mb-3">Don't Miss It, Rams!</p>
         <h2 class="font-display text-3xl sm:text-5xl md:text-6xl text-white mb-4 sm:mb-6">RSVP</h2>
         <p class="font-body text-sm sm:text-base text-silver/55 mb-10 max-w-md mx-auto">
-          RSVP is <strong class="text-silver-light">free</strong> and separate from your ticket — it just tells us you're planning to come. Grab your ticket <a href="#tickets" class="text-scarlet hover:text-scarlet-light underline underline-offset-4 cursor-pointer">up top</a>.
+          RSVP is <strong class="text-silver-light">free</strong> and separate from your ticket. Tap COUNT ME IN — your email app opens with your info pre-filled, just hit Send. Grab your ticket <a href="#tickets" class="text-scarlet hover:text-scarlet-light underline underline-offset-4 cursor-pointer">up top</a>.
         </p>
       </div>
 
       <!--
-        RSVP form — submissions go to createyourwellness@gmail.com via FormSubmit.co.
-        First submission will trigger a one-time activation email — confirm it
-        to start receiving entries.
+        RSVP form — client-side only. The JS submit handler formats every
+        field into a mailto: URL and opens the user's email app with
+        everything pre-filled. Zero third-party dependency; always works.
+        The mailto: action attribute is a JS-off fallback.
       -->
       <form
         id="rsvp-form"
-        action="https://formsubmit.co/createyourwellness@gmail.com"
-        method="POST"
+        action="mailto:createyourwellness@gmail.com?subject=LMHS%20Reunion%20RSVP"
+        method="post"
+        enctype="text/plain"
         class="reveal reveal-delay-1 space-y-5 max-w-md mx-auto"
       >
-        <input type="hidden" name="_subject" value="New RSVP — LMHS Reunion Weekend 2026">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 
         <!-- Name -->
@@ -1067,42 +1066,49 @@
       });
     });
 
-    // RSVP form: submit to FormSubmit, then swap to success card.
-    // _next MUST be built from origin + pathname (not location.href) so the
-    // existing '#rsvp' fragment doesn't corrupt the '?rsvp=success' query.
+    // RSVP form — JS builds a nicely formatted mailto: URL and opens the
+    // user's email app with every field pre-filled. Never depends on a
+    // third-party service, so there's nothing to go down.
     const rsvpForm = document.getElementById('rsvp-form');
-    const nextInput = document.createElement('input');
-    nextInput.type = 'hidden';
-    nextInput.name = '_next';
-    nextInput.value = window.location.origin + window.location.pathname + '?rsvp=success#rsvp';
-    rsvpForm.appendChild(nextInput);
-
-    // Loading state on submit + guard against double-submits
     const rsvpBtn = document.getElementById('rsvp-submit');
-    const rsvpBtnOriginal = rsvpBtn ? rsvpBtn.textContent : 'COUNT ME IN';
+
     rsvpForm.addEventListener('submit', function(e) {
-      if (!rsvpForm.checkValidity()) {
-        e.preventDefault();
-        rsvpForm.reportValidity();
-        return;
-      }
+      // Always intercept — even the mailto action fallback would work, but
+      // JS lets us build a clean subject line + readable body.
+      e.preventDefault();
+      // Honeypot: bots fill hidden inputs, humans don't.
+      if (rsvpForm.querySelector('input[name="_honey"]').value) return;
+      if (!rsvpForm.checkValidity()) { rsvpForm.reportValidity(); return; }
+
+      const d = new FormData(rsvpForm);
+      const name = (d.get('name') || '').trim();
+      const body =
+        `Name: ${name}\r\n` +
+        `Email: ${d.get('email') || ''}\r\n` +
+        `Graduating Class: ${d.get('graduating_class') || '(not provided)'}\r\n` +
+        `Attending: ${d.get('attending') || '(not selected)'}\r\n` +
+        `Number of Guests: ${d.get('guests') || '0'}\r\n` +
+        `Alumni T-Shirt Size(s): ${d.get('tshirt_sizes') || '(none)'}\r\n` +
+        `Message: ${d.get('message') || '(none)'}\r\n\r\n` +
+        `— Sent from maryreunion96.com`;
+      const subject = 'LMHS Reunion RSVP' + (name ? ` — ${name}` : '');
+      const mailto = 'mailto:createyourwellness@gmail.com'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body='   + encodeURIComponent(body);
+
       if (rsvpBtn) {
         rsvpBtn.disabled = true;
         rsvpBtn.style.opacity = '0.7';
-        rsvpBtn.style.cursor = 'wait';
-        rsvpBtn.textContent = 'SUBMITTING…';
-        // If FormSubmit hangs (Cloudflare 522 etc), un-freeze the button after 15s
-        // and tell the user to email directly.
-        setTimeout(() => {
-          if (rsvpBtn.disabled) {
-            rsvpBtn.disabled = false;
-            rsvpBtn.style.opacity = '1';
-            rsvpBtn.style.cursor = 'pointer';
-            rsvpBtn.textContent = rsvpBtnOriginal;
-            alert("Hmm — the RSVP form is taking a while to respond. Please try once more, or email us directly at createyourwellness@gmail.com and we'll get you on the list.");
-          }
-        }, 15000);
+        rsvpBtn.textContent = 'OPENING EMAIL…';
       }
+      // Open the mail app. On mobile Safari and desktop this fires the
+      // handler and either opens Mail/Gmail/Outlook or (on shared computers
+      // with no default) does nothing — hence the visible fallback link
+      // below the form remains there as a copy-and-send option.
+      window.location.href = mailto;
+      // Swap to the success card shortly after — assumes the user follows
+      // through in their mail client. If they cancel, they can re-submit.
+      setTimeout(() => { showRsvpSuccess(); }, 1200);
     });
 
     if (new URLSearchParams(window.location.search).get('rsvp') === 'success') {
@@ -1120,8 +1126,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
           </div>
-          <h3 class="font-display text-3xl tracking-wide text-white mb-2">YOU'RE IN!</h3>
-          <p class="font-body text-base text-silver/60 max-w-sm mx-auto mb-8">We'll be in touch with all the details. See you in October, Ram!</p>
+          <h3 class="font-display text-3xl tracking-wide text-white mb-2">THANKS, RAM!</h3>
+          <p class="font-body text-base text-silver/60 max-w-sm mx-auto mb-3">Your email app should be open with your RSVP pre-filled — <strong class="text-silver-light">just tap Send</strong> to finish.</p>
+          <p class="font-body text-sm text-silver/40 max-w-sm mx-auto mb-8">Didn't open? Email <a href="mailto:createyourwellness@gmail.com" class="text-scarlet-light underline underline-offset-2">createyourwellness@gmail.com</a> and we'll get you on the list.</p>
           <a href="#tickets" class="inline-flex items-center gap-2 font-heading text-sm tracking-[0.2em] bg-scarlet hover:bg-scarlet-light text-white px-8 py-3.5 min-h-[48px] transition-all duration-300 hover:shadow-[0_0_30px_rgba(196,30,58,0.35)] cursor-pointer">
             NOW GRAB YOUR TICKET
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
